@@ -328,17 +328,17 @@
     /* ── OTP boxes ── */
     .login-otp {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
       margin-bottom: 0;
     }
 
     .login-otp-box {
-      width: 64px;
-      height: 68px;
+      width: 42px;
+      height: 54px;
       border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      font-size: 26px;
+      border-radius: 12px;
+      font-size: 20px;
       font-weight: 800;
       text-align: center;
       font-family: inherit;
@@ -474,11 +474,7 @@
       display: none;
     }
 
-    /* Admin 6-box OTP — smaller to prevent overflow */
-    #adminOtp { gap: 7px; }
-    #adminOtp .login-otp-box { width: 44px; height: 54px; font-size: 20px; }
-
-    /* ─────────────────────────────────────────
+/* ─────────────────────────────────────────
    FORM
 ───────────────────────────────────────── */
     .rules-card {
@@ -1486,13 +1482,13 @@
           <!-- Branch panel -->
           <div class="login-branch-panel" id="branchPanel">
             <div class="login-otp" id="loginOtp">
-              <input class="login-otp-box" id="lc0" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="lc0" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onOtpInput(0,this)" onkeydown="onOtpKey(0,this,event)" onpaste="onOtpPaste(event)">
-              <input class="login-otp-box" id="lc1" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="lc1" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onOtpInput(1,this)" onkeydown="onOtpKey(1,this,event)">
-              <input class="login-otp-box" id="lc2" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="lc2" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onOtpInput(2,this)" onkeydown="onOtpKey(2,this,event)">
-              <input class="login-otp-box" id="lc3" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="lc3" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onOtpInput(3,this)" onkeydown="onOtpKey(3,this,event)">
             </div>
 
@@ -1501,18 +1497,18 @@
           <!-- Admin panel (6-digit OTP) -->
           <div class="login-admin-panel" id="adminPanel">
             <div class="login-otp" id="adminOtp">
-              <input class="login-otp-box" id="ac0" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="ac0" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onAdminOtpInput(0,this)" onkeydown="onAdminOtpKey(0,this,event)"
                 onpaste="onAdminOtpPaste(event)">
-              <input class="login-otp-box" id="ac1" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="ac1" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onAdminOtpInput(1,this)" onkeydown="onAdminOtpKey(1,this,event)">
-              <input class="login-otp-box" id="ac2" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="ac2" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onAdminOtpInput(2,this)" onkeydown="onAdminOtpKey(2,this,event)">
-              <input class="login-otp-box" id="ac3" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="ac3" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onAdminOtpInput(3,this)" onkeydown="onAdminOtpKey(3,this,event)">
-              <input class="login-otp-box" id="ac4" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="ac4" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onAdminOtpInput(4,this)" onkeydown="onAdminOtpKey(4,this,event)">
-              <input class="login-otp-box" id="ac5" type="tel" maxlength="1" inputmode="numeric" autocomplete="off"
+              <input class="login-otp-box" id="ac5" type="password" maxlength="1" inputmode="numeric" autocomplete="off"
                 oninput="onAdminOtpInput(5,this)" onkeydown="onAdminOtpKey(5,this,event)">
             </div>
           </div>
