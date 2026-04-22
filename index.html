@@ -490,6 +490,9 @@ tbody tr:hover td { background: #fffbf7; }
   .hdr-actions { display: none !important; }
   /* iOS date input fix */
   input[type="date"] { -webkit-appearance: none; appearance: none; }
+  /* ซ่อนปุ่มกลับ (ล่างซ้าย) ใน Plan และปุ่มส่งยอดในประวัติ — ใช้ bottom nav แทน */
+  .plan-sticky-btn .btn-outline { display: none; }
+  .hist-hdr .btn-outline { display: none; }
 }
 @media (max-width: 380px) {
   .login-code-inp { font-size: 26px; letter-spacing: 7px; }
@@ -684,7 +687,6 @@ tbody tr:hover td { background: #fffbf7; }
       <span class="plan-month-lbl" id="planMonthLbl"></span>
       <button class="btn btn-sm btn-outline" onclick="planNextMonth()">›</button>
     </div>
-    <button class="btn btn-sm btn-outline" onclick="showForm()">← กลับ</button>
   </div>
 
   <!-- Summary cards -->
