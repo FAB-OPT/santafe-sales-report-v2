@@ -95,6 +95,8 @@ body {
 .btn-outline:hover { border-color: var(--brand); color: var(--brand); }
 .btn-ghost { background: rgba(255,255,255,.15); color: #fff; border: 1.5px solid rgba(255,255,255,.3); }
 .btn-ghost:hover { background: rgba(255,255,255,.25); }
+.btn-danger { background: var(--red); color: #fff; border: none; }
+.btn-danger:hover, .btn-danger:active { background: #b91c1c; }
 .btn-sm { padding: 7px 13px; font-size: 13px; min-height: 34px; border-radius: 8px; }
 .btn-lg { padding: 14px 28px; font-size: 16px; min-height: 50px; border-radius: 12px; width: 100%; }
 .btn:disabled { opacity: .55; cursor: default; pointer-events: none; }
@@ -451,7 +453,11 @@ tbody tr:hover td { background: #fffbf7; }
   .hist-hdr h2 { font-size: 16px; }
   /* ซ่อนโลโก้, divider และ sep บน mobile ให้ชื่อสาขาไม่ตกกรอบ */
   .hdr-logo, .hdr-sep, .hdr-divider { display: none !important; }
-  .hdr-branch { padding-left: 4px; }
+  .hdr-branch { padding-left: 4px; flex-basis: 100%; }
+  /* header 2 แถวบน mobile */
+  .hdr { height: auto; min-height: var(--hdr-h); flex-wrap: wrap; padding: 10px 16px; gap: 6px; }
+  .hdr-actions { flex-basis: 100%; justify-content: flex-start; flex-wrap: wrap; }
+  .hdr-actions .btn { font-size: 12px; padding: 6px 10px; min-height: 30px; }
 }
 @media (max-width: 380px) {
   .login-code-inp { font-size: 26px; letter-spacing: 7px; }
@@ -486,9 +492,9 @@ tbody tr:hover td { background: #fffbf7; }
     <div class="hdr-branch-dm" id="hdrBranchDm"></div>
   </div>
   <div class="hdr-actions" id="hdrActions" style="display:none">
-    <button class="btn btn-sm btn-outline" onclick="showPlan()">📅 Plan</button>
-    <button class="btn btn-sm btn-outline" onclick="showHistory()">📊 ประวัติ</button>
-    <button class="btn btn-sm btn-outline" onclick="doLogout()">ออก</button>
+    <button class="btn btn-sm btn-outline" onclick="showPlan()">📅 Plan Sale</button>
+    <button class="btn btn-sm btn-outline" onclick="showHistory()">📊 ดูประวัติย้อนหลัง/แก้ไขข้อมูล</button>
+    <button class="btn btn-sm btn-danger" onclick="doLogout()">ออกจากระบบ</button>
   </div>
 </header>
 
