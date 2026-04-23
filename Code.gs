@@ -17,8 +17,18 @@ var SALES_HDR = [
 
 var PLAN_HDR = ["branch_code","date","plan_sale","submitter_name","updated_at"];
 
-// ── Entry point ──────────────────────────────────────────────
+// ── Entry points ─────────────────────────────────────────────
+// doGet: GET request ไม่มี redirect → CORS ทำงานได้ทันที (ใช้หลัก)
+function doGet(e) {
+  return handleRequest(e);
+}
+
+// doPost: เก็บไว้เป็น fallback
 function doPost(e) {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
   try {
     var p    = e.parameter;
     var mode = p.mode || "";

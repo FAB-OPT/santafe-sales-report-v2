@@ -2641,20 +2641,20 @@
       }
 
       /* ════════════════════════════════════════════
-         API CALL (fetch — GAS Web App JSON)
+         API CALL — GET request (GAS doGet ไม่มี redirect, รองรับ CORS)
       ════════════════════════════════════════════ */
       function apiCall(params, cb) {
         let done = false;
         const finish = (data) => { if (!done) { done = true; cb(data); } };
 
-        setTimeout(() => finish(null), 15000);
+        setTimeout(() => finish(null), 20000);
 
-        const body = new URLSearchParams();
-        Object.keys(params).forEach(k => body.append(k, String(params[k] ?? "")));
+        const qs = new URLSearchParams();
+        Object.keys(params).forEach(k => qs.append(k, String(params[k] ?? "")));
 
-        fetch(WEB_APP_URL, { method: "POST", body: body })
-          .then(r => r.text())
-          .then(text => { try { finish(JSON.parse(text)); } catch (_) { finish(null); } })
+        fetch(WEB_APP_URL + "?" + qs.toString())
+          .then(r => r.json())
+          .then(data => finish(data))
           .catch(() => finish(null));
       }
 
