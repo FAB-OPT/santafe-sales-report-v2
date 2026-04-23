@@ -2110,6 +2110,12 @@
         const planEl   = document.getElementById("plan_sale");
         if (planWrap) planWrap.style.display = isEod ? "none" : "";
         if (planEl)   { planEl.disabled = isEod; if (isEod) planEl.value = ""; }
+
+        // auto-fill Plan Sale เมื่อเลือกรอบ 16.00
+        if (is1600) {
+          const d = document.getElementById("submit_date").value;
+          if (d) fetchPlanForDate(d);
+        }
       }
 
       /* ════════════════════════════════════════════
@@ -2211,7 +2217,7 @@
         html += rvRow("วันที่", date);
         html += rvRow("รอบเวลา", slot);
         html += rvSec("ยอดขาย");
-        html += rvRow("Plan Sale", fmt(p.plan_sale));
+        if (p.plan_sale > 0) html += rvRow("Plan Sale", fmt(p.plan_sale));
         html += rvHi("Actual Sale", fmt(p.actual_sale));
         const pct = p.plan_sale > 0 ? (p.actual_sale / p.plan_sale * 100).toFixed(1) + "%" : "-";
         const pctColor = p.plan_sale > 0 ? (p.actual_sale >= p.plan_sale ? "#15803d" : "#dc2626") : "#64748b";
@@ -2232,8 +2238,9 @@
           html += rvRow("Shopee Food", fmt(p.trans_shopeefood));
           html += rvSec("Customer & Labour");
           html += rvRow("Customer", fmt(p.customer));
-          html += rvRow("Labour Hour", fmt(p.labour_hour));
-          html += rvRow("Labour Baht", fmt(p.labour_baht));
+          html += rvRow("Labour Hour", fmt(p.labour_hour) + " ชม.");
+          const labPct = p.actual_sale > 0 ? " (" + (p.labour_baht / p.actual_sale * 100).toFixed(1) + "%)" : "";
+          html += rvRow("Labour Baht", fmt(p.labour_baht) + labPct);
         }
 
         document.getElementById("reviewBody").innerHTML = html;

@@ -70,9 +70,35 @@ function toDateStr(v) {
   return String(v);
 }
 
+// Sheets แปลง "16.00" → number 16 → ต้อง toFixed(2) คืนกลับ
+function toSlotStr(v) {
+  if (typeof v === "number") return v.toFixed(2);
+  return String(v);
+}
+
 function toNum(v) {
   var n = parseFloat(v);
   return isNaN(n) ? 0 : n;
+}
+
+// ── Plan sync helper ─────────────────────────────────────────
+// เรียกหลัง submit/edit ที่มี plan_sale > 0 เพื่อ sync ไป Plan sheet
+function upsertPlan(branch_code, date, plan_sale, submitter_name) {
+  var sheet = getPlanSheet();
+  var data  = sheet.getDataRange().getValues();
+  var now   = new Date().toISOString();
+
+  for (var i = 1; i < data.length; i++) {
+    var rowCode = String(data[i][0]).replace(/^'/, "");
+    var rowDate = toDateStr(data[i][1]);
+    if (rowCode === String(branch_code) && rowDate === String(date)) {
+      sheet.getRange(i + 1, 3).setValue(plan_sale);
+      sheet.getRange(i + 1, 4).setValue(submitter_name || "");
+      sheet.getRange(i + 1, 5).setValue(now);
+      return;
+    }
+  }
+  sheet.appendRow(["'" + branch_code, date, plan_sale, submitter_name || "", now]);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -86,12 +112,12 @@ function handleSubmit(p) {
     var r = data[i];
     if (String(r[4])    === String(p.branch_code) &&
         toDateStr(r[5]) === String(p.submit_date) &&
-        String(r[6])    === String(p.submit_time_slot)) {
+        toSlotStr(r[6]) === String(p.submit_time_slot)) {
       return {
         ok: false,
         duplicate: {
           submit_date:      toDateStr(r[5]),
-          submit_time_slot: String(r[6]),
+          submit_time_slot: toSlotStr(r[6]),
           submitter_name:   String(r[1])
         }
       };
@@ -117,6 +143,11 @@ function handleSubmit(p) {
     toNum(p.labour_baht),
     0, ""
   ]);
+
+  // sync Plan Sale → Plan sheet (เฉพาะเมื่อมีค่า plan_sale)
+  if (toNum(p.plan_sale) > 0) {
+    upsertPlan(p.branch_code, p.submit_date, toNum(p.plan_sale), p.submitter_name);
+  }
 
   return { ok: true };
 }
@@ -261,6 +292,11 @@ function handleEdit(p) {
     new Date().toISOString()
   ]]);
 
+  // sync Plan Sale → Plan sheet (เฉพาะเมื่อมีค่า plan_sale)
+  if (toNum(p.plan_sale) > 0) {
+    upsertPlan(p.branch_code, toDateStr(existing[5]), toNum(p.plan_sale), p.submitter_name);
+  }
+
   return { ok: true, edited: true, editCount: editCount };
 }
 
@@ -274,7 +310,7 @@ function rowToObj(r, rowNum) {
     branch:           String(r[3]),
     branch_code:      String(r[4]).replace(/^'/, ""),
     submit_date:      toDateStr(r[5]),
-    submit_time_slot: String(r[6]),
+    submit_time_slot: toSlotStr(r[6]),
     plan_sale:        r[7],
     actual_sale:      r[8],
     sale_dine_in:     r[9],
