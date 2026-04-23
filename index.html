@@ -1890,6 +1890,7 @@
       let S = { code: "", branch: "", dm: "" };
       let _pendingPayload = null;
       let _editRow = null;
+      let _currentPlan = 0; // Plan Sale ที่ดึงจาก DB สำหรับวันที่ที่เลือก
 
       /* ════════════════════════════════════════════
          INIT
@@ -2105,14 +2106,15 @@
           if (is1600) el.value = "";
         });
 
-        // plan_sale: ซ่อนสำหรับ สิ้นวัน (ไม่ใช้ Plan Sale ในรอบนี้)
+        // plan_sale: ซ่อนทุกรอบ — ดึงจาก DB อัตโนมัติ ไม่ให้ user กรอกเอง
         const planWrap = document.getElementById("plan_sale")?.closest(".field");
         const planEl   = document.getElementById("plan_sale");
-        if (planWrap) planWrap.style.display = isEod ? "none" : "";
-        if (planEl)   { planEl.disabled = isEod; if (isEod) planEl.value = ""; }
+        if (planWrap) planWrap.style.display = "none";
+        if (planEl)   { planEl.disabled = true; planEl.value = ""; }
 
-        // auto-fill Plan Sale เมื่อเลือกรอบ 16.00
-        if (is1600) {
+        // ดึง Plan Sale จาก DB เมื่อเลือกรอบ 16.00 / reset เมื่อเปลี่ยน
+        if (isEod) { _currentPlan = 0; }
+        else {
           const d = document.getElementById("submit_date").value;
           if (d) fetchPlanForDate(d);
         }
@@ -2142,10 +2144,6 @@
         // Actual Sale บังคับทุกรอบ
         if (numVal("actual_sale") <= 0)
           errs.push("Actual Sale: ยังไม่ได้ระบุยอดขาย");
-
-        // Plan Sale บังคับเฉพาะ 16.00
-        if (!isEod && numVal("plan_sale") <= 0)
-          errs.push("Plan Sale: ยังไม่ได้ระบุยอดเป้า");
 
         // ผลรวม Sale ย่อย ต้องเท่ากับ Actual Sale
         const saleSub = numVal("sale_dine_in") + numVal("sale_take_away") +
@@ -2195,6 +2193,7 @@
           submit_time_slot: slot
         };
         NUM_FIELDS.forEach(id => { p[id] = numVal(id); });
+        p.plan_sale = slot !== "สิ้นวัน" ? _currentPlan : 0;
         _pendingPayload = p;
 
         // Build review HTML
@@ -2286,11 +2285,7 @@
         });
         document.getElementById("submit_time_slot").value = "";
         document.getElementById("submit_date").value = todayStr();
-        // แสดง plan_sale กลับมา (reset สถานะจาก onSlotChange)
-        const planWrapR = document.getElementById("plan_sale")?.closest(".field");
-        const planElR   = document.getElementById("plan_sale");
-        if (planWrapR) planWrapR.style.display = "";
-        if (planElR)   planElR.disabled = false;
+        _currentPlan = 0;
       }
 
       /* ════════════════════════════════════════════
@@ -2442,13 +2437,11 @@
 
       // Auto-fill Plan Sale จากฐานข้อมูล เมื่อเลือกวันที่
       function fetchPlanForDate(dateStr) {
+        _currentPlan = 0;
         if (!dateStr || !S.code) return;
         apiCall({ mode: "getPlan", branch_code: S.code, date: dateStr }, function (res) {
           if (!res || !res.ok || !res.rows || !res.rows.length) return;
-          const plan = parseFloat(res.rows[0].plan_sale) || 0;
-          if (plan <= 0) return;
-          const el = document.getElementById("plan_sale");
-          if (el && !el.disabled) el.value = plan;
+          _currentPlan = parseFloat(res.rows[0].plan_sale) || 0;
         });
       }
 
@@ -2518,7 +2511,7 @@
       <td style="text-align:right" class="${pctCls}">${pctTxt}</td>
       <td style="text-align:right">${fmt(r.total_trans)}</td>
       <td style="text-align:right">${fmt(r.customer)}</td>
-      <td style="text-align:right">${isEod ? fmt(r.labour_baht) : "-"}</td>
+      <td style="text-align:right">${isEod ? (() => { const lbPct = actual > 0 ? ` (${(parseFloat(r.labour_baht)/actual*100).toFixed(1)}%)` : ""; return `${parseFloat(r.labour_hour)||0} ชม. / ฿${fmt(r.labour_baht)}${lbPct}`; })() : "-"}</td>
       <td>${editBtn}</td>
     </tr>`;
 
@@ -2538,7 +2531,7 @@
         <span class="hist-card-val ${pctCls}">${pctTxt}</span>
       </div>
       <div class="hist-card-row"><span class="hist-card-lbl">Trans / Customer</span><span class="hist-card-val">${fmt(r.total_trans)} / ${fmt(r.customer)}</span></div>
-      ${isEod ? `<div class="hist-card-row"><span class="hist-card-lbl">Labour (฿)</span><span class="hist-card-val">${fmt(r.labour_baht)}</span></div>` : ""}
+      ${isEod ? `<div class="hist-card-row"><span class="hist-card-lbl">Labour Hour</span><span class="hist-card-val">${parseFloat(r.labour_hour)||0} ชม.</span></div><div class="hist-card-row"><span class="hist-card-lbl">Labour Baht</span><span class="hist-card-val">฿${fmt(r.labour_baht)}${actual > 0 ? ` (${(parseFloat(r.labour_baht)/actual*100).toFixed(1)}%)` : ""}</span></div>` : ""}
       <div class="hist-card-actions">${editBtn}</div>
     </div>`;
         });
