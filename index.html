@@ -2647,33 +2647,32 @@
          API CALL — GET request (GAS doGet ไม่มี redirect, รองรับ CORS)
       ════════════════════════════════════════════ */
       function apiCall(params, cb, _retry) {
-        const maxRetry = (_retry === undefined) ? 2 : _retry;
-        let done = false;
-        const finish = (data) => { if (!done) { done = true; cb(data); } };
-
-        const timeoutMs = 25000 + (2 - maxRetry) * 5000; // เพิ่ม timeout ตาม retry
-        const timer = setTimeout(() => finish(null), timeoutMs);
+        const maxRetry = (_retry === undefined) ? 3 : _retry;
 
         const qs = new URLSearchParams();
         Object.keys(params).forEach(k => qs.append(k, String(params[k] ?? "")));
 
-        fetch(WEB_APP_URL + "?" + qs.toString())
+        const controller = new AbortController();
+        // ใช้ AbortController ยกเลิก fetch เมื่อ timeout → catch จะ retry ได้จริง
+        const timer = setTimeout(() => controller.abort(), 28000);
+
+        fetch(WEB_APP_URL + "?" + qs.toString(), { signal: controller.signal })
           .then(r => r.json())
           .then(data => {
             clearTimeout(timer);
-            // retry อัตโนมัติเมื่อ GAS lock timeout (ระบบยุ่ง)
             if (data && data.error === "LOCK_TIMEOUT" && maxRetry > 0) {
               setTimeout(() => apiCall(params, cb, maxRetry - 1), 3000 + Math.random() * 2000);
               return;
             }
-            finish(data);
+            cb(data);
           })
           .catch(() => {
             clearTimeout(timer);
             if (maxRetry > 0) {
-              setTimeout(() => apiCall(params, cb, maxRetry - 1), 3000);
+              // GAS cold start หรือ network blip → รอแล้ว retry
+              setTimeout(() => apiCall(params, cb, maxRetry - 1), 2000);
             } else {
-              finish(null);
+              cb(null);
             }
           });
       }
