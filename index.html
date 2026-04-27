@@ -1891,6 +1891,7 @@
       let _pendingPayload = null;
       let _editRow = null;
       let _currentPlan = 0; // Plan Sale ที่ดึงจาก DB สำหรับวันที่ที่เลือก
+      let _planCache   = {}; // cache: "branch|date" → plan_sale (ลด concurrent fetch)
 
       /* ════════════════════════════════════════════
          INIT
@@ -2198,16 +2199,14 @@
         };
         NUM_FIELDS.forEach(id => { p[id] = numVal(id); });
 
-        // fetch Plan Sale สด จาก DB ก่อนเปิด review (ไม่พึ่ง _currentPlan ที่อาจโหลดช้า)
+        // ดึง Plan Sale: ใช้ cache ก่อน (ไม่ต้อง fetch ซ้ำถ้าเปลี่ยน slot วันเดิม)
         const _reviewBtn = document.querySelector(".form-sticky-btn .btn-brand");
-        if (_reviewBtn) { _reviewBtn.disabled = true; _reviewBtn.textContent = "⏳ กำลังโหลด..."; }
+        const cacheKey   = S.code + "|" + date;
 
-        apiCall({ mode: "getPlan", branch_code: S.code, date: date }, function(planRes) {
-          if (_reviewBtn) { _reviewBtn.disabled = false; _reviewBtn.textContent = "✓ ตรวจสอบ & ส่งข้อมูล"; }
-
-          p.plan_sale = (planRes && planRes.ok && planRes.rows && planRes.rows.length)
-            ? (parseFloat(planRes.rows[0].plan_sale) || 0) : 0;
-          _currentPlan = p.plan_sale;
+        function buildReview(planSale) {
+          _currentPlan = planSale;
+          _planCache[cacheKey] = planSale;
+          p.plan_sale = planSale;
           _pendingPayload = p;
 
           function rvRow(lbl, val) {
@@ -2259,7 +2258,20 @@
           document.getElementById("confirmBtn").disabled = false;
           document.getElementById("confirmBtn").textContent = "ยืนยันส่ง ✓";
           openM("mReview");
-        });
+        } // end buildReview
+
+        // ใช้ cache ถ้าเคย fetch วันนี้แล้ว ไม่ต้อง fetch ซ้ำ
+        if (_planCache[cacheKey] !== undefined) {
+          buildReview(_planCache[cacheKey]);
+        } else {
+          if (_reviewBtn) { _reviewBtn.disabled = true; _reviewBtn.textContent = "⏳ กำลังโหลด..."; }
+          apiCall({ mode: "getPlan", branch_code: S.code, date: date }, function(planRes) {
+            if (_reviewBtn) { _reviewBtn.disabled = false; _reviewBtn.textContent = "✓ ตรวจสอบ & ส่งข้อมูล"; }
+            const val = (planRes && planRes.ok && planRes.rows && planRes.rows.length)
+              ? (parseFloat(planRes.rows[0].plan_sale) || 0) : 0;
+            buildReview(val);
+          });
+        }
       }
 
       function confirmSubmit() {
@@ -2300,6 +2312,7 @@
         document.getElementById("submit_time_slot").value = "";
         document.getElementById("submit_date").value = todayStr();
         _currentPlan = 0;
+        _planCache   = {};
       }
 
       /* ════════════════════════════════════════════
@@ -2445,13 +2458,20 @@
         });
       }
 
-      // Auto-fill Plan Sale จากฐานข้อมูล เมื่อเลือกวันที่
+      // Auto-fill Plan Sale จากฐานข้อมูล เมื่อเลือกวันที่ (cache ป้องกัน concurrent fetch)
       function fetchPlanForDate(dateStr) {
         _currentPlan = 0;
         if (!dateStr || !S.code) return;
+        const cacheKey = S.code + "|" + dateStr;
+        if (_planCache[cacheKey] !== undefined) {
+          _currentPlan = _planCache[cacheKey];
+          return;
+        }
         apiCall({ mode: "getPlan", branch_code: S.code, date: dateStr }, function (res) {
-          if (!res || !res.ok || !res.rows || !res.rows.length) return;
-          _currentPlan = parseFloat(res.rows[0].plan_sale) || 0;
+          const val = (res && res.ok && res.rows && res.rows.length)
+            ? (parseFloat(res.rows[0].plan_sale) || 0) : 0;
+          _planCache[cacheKey] = val;
+          _currentPlan = val;
         });
       }
 
