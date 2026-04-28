@@ -1371,8 +1371,9 @@
           display: none !important;
         }
 
+        /* Mobile: แสดงปุ่มออกจากระบบใน header */
         .hdr-logout-btn {
-          display: flex !important;
+          display: inline-flex !important;
         }
 
         /* iOS date input fix */
@@ -1473,11 +1474,12 @@
         <div class="hdr-branch-dm" id="hdrBranchDm"></div>
       </div>
       <div class="hdr-actions" id="hdrActions" style="display:none">
+        <button class="btn btn-sm btn-outline" onclick="showDash()">📊 แดชบอร์ด</button>
         <button class="btn btn-sm btn-outline" onclick="showPlan()">📅 Plan Sale</button>
-        <button class="btn btn-sm btn-outline" onclick="showHistory()">📊 ดูประวัติย้อนหลัง/แก้ไขข้อมูล</button>
-        <button class="btn btn-sm btn-danger" onclick="doLogout()">ออกจากระบบ</button>
+        <button class="btn btn-sm btn-outline" onclick="showHistory()">🗂️ ประวัติ</button>
+        <button class="btn btn-sm btn-danger" onclick="doLogout()">🚪 ออกจากระบบ</button>
       </div>
-      <button class="btn btn-sm btn-danger hdr-logout-btn" id="hdrLogoutBtn" onclick="doLogout()" style="display:none">🚪</button>
+      <button class="btn btn-sm btn-danger hdr-logout-btn" id="hdrLogoutBtn" onclick="doLogout()" style="display:none">🚪 ออกจากระบบ</button>
     </header>
 
     <!-- ════════════════════════════════════════
@@ -1741,26 +1743,34 @@
 ════════════════════════════════════════ -->
     <div id="sDash" class="screen">
       <div class="dash-wrap">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
           <h2 style="font-size:1.05rem;font-weight:800">📊 แดชบอร์ด</h2>
           <button class="btn btn-sm" onclick="loadDash()" style="background:#f1f5f9;color:#475569">🔄 รีเฟรช</button>
         </div>
-        <div id="dashTodayTitle" class="dash-sec-title">วันนี้</div>
+
+        <div class="dash-sec-title">สรุปรายวัน</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <input type="date" id="dashDatePicker" class="field-input" style="flex:1;max-width:200px"
+            onchange="renderDashFromCache()">
+          <button class="btn btn-sm btn-outline" onclick="document.getElementById('dashDatePicker').value=todayStr();renderDashFromCache()">วันนี้</button>
+        </div>
         <div class="dash-today-grid" id="dashTodayGrid">
           <div class="dash-today-card"><div class="dtc-slot">🕓 รอบ 16.00</div><div class="dtc-status" style="color:#94a3b8">⏳ กำลังโหลด...</div></div>
           <div class="dash-today-card"><div class="dtc-slot">🌙 รอบสิ้นวัน</div><div class="dtc-status" style="color:#94a3b8">⏳ กำลังโหลด...</div></div>
         </div>
-        <div id="dashMonthTitle" class="dash-sec-title">เดือนนี้</div>
+
+        <div id="dashMonthTitle" class="dash-sec-title">สรุปรายเดือน</div>
         <div class="dash-stats-grid" id="dashStatsGrid">
           <div class="dash-stat"><div class="ds-val">-</div><div class="ds-lbl">Actual Sale</div></div>
           <div class="dash-stat"><div class="ds-val">-</div><div class="ds-lbl">% ของ Plan</div></div>
           <div class="dash-stat"><div class="ds-val">-</div><div class="ds-lbl">Trans/วัน</div></div>
           <div class="dash-stat"><div class="ds-val">-</div><div class="ds-lbl">Labour %</div></div>
         </div>
-        <div class="dash-sec-title">7 วันล่าสุด <span style="font-weight:400;text-transform:none">(รอบสิ้นวัน)</span></div>
+
+        <div class="dash-sec-title">30 วันล่าสุด <span style="font-weight:400;text-transform:none">(รอบสิ้นวัน)</span></div>
         <div class="dash-card-wrap">
           <table class="dash-tbl">
-            <thead><tr><th>วันที่</th><th>Actual</th><th>Plan</th><th>%Plan</th><th>Trans</th></tr></thead>
+            <thead><tr><th>วันที่</th><th>Plan</th><th>Actual</th><th>%</th><th>%Labour</th></tr></thead>
             <tbody id="dashRecentBody"><tr><td colspan="5" style="color:#94a3b8;padding:16px">⏳ กำลังโหลด...</td></tr></tbody>
           </table>
         </div>
@@ -2140,7 +2150,7 @@
         document.getElementById("submit_date").value = todayStr();
         const savedName = localStorage.getItem(LS_NAME);
         if (savedName) document.getElementById("submitter_name").value = savedName;
-        showForm();
+        showDash();
       }
 
       function showForm() {
@@ -2161,8 +2171,9 @@
         loadDash();
       }
 
+      let _dashRows = []; // cache rows for date picker re-render
+
       function loadDash() {
-        const loadHtml = `<div style="text-align:center;padding:24px;color:#94a3b8">⏳ กำลังโหลด...</div>`;
         document.getElementById("dashTodayGrid").innerHTML =
           `<div class="dash-today-card"><div class="dtc-slot">🕓 รอบ 16.00</div><div class="dtc-status" style="color:#94a3b8">⏳ กำลังโหลด...</div></div>` +
           `<div class="dash-today-card"><div class="dtc-slot">🌙 รอบสิ้นวัน</div><div class="dtc-status" style="color:#94a3b8">⏳ กำลังโหลด...</div></div>`;
@@ -2171,23 +2182,40 @@
         document.getElementById("dashRecentBody").innerHTML =
           `<tr><td colspan="5" style="color:#94a3b8;padding:16px">⏳ กำลังโหลด...</td></tr>`;
 
+        // ตั้งค่า date picker เป็นวันนี้ถ้ายังไม่มีค่า
+        const picker = document.getElementById("dashDatePicker");
+        if (!picker.value) picker.value = todayStr();
+
         apiCall({ mode: "history", branch_code: S.code, days: 31 }, function(res) {
           if (!res || !res.ok) {
-            const err = `<tr><td colspan="5" style="color:#dc2626;padding:16px">⚠️ โหลดไม่สำเร็จ</td></tr>`;
-            document.getElementById("dashRecentBody").innerHTML = err;
+            document.getElementById("dashRecentBody").innerHTML =
+              `<tr><td colspan="5" style="color:#dc2626;padding:16px">⚠️ โหลดไม่สำเร็จ</td></tr>`;
             return;
           }
-          const rows = res.rows || [];
+          _dashRows = res.rows || [];
           const today = todayStr();
-          renderDashToday(rows, today);
-          renderDashMonthly(rows, today);
-          renderDashRecent(rows);
+          renderDashToday(_dashRows, picker.value || today);
+          renderDashMonthly(_dashRows, today);
+          renderDashRecent(_dashRows);
         });
       }
 
-      function renderDashToday(rows, today) {
-        const r1600 = rows.find(r => r.submit_date === today && r.submit_time_slot === "16.00");
-        const rEod  = rows.find(r => r.submit_date === today && r.submit_time_slot === "สิ้นวัน");
+      // เรียกเมื่อเปลี่ยนวันที่ใน date picker (ไม่ fetch ใหม่)
+      function renderDashFromCache() {
+        if (!_dashRows.length) return;
+        const date = document.getElementById("dashDatePicker").value || todayStr();
+        renderDashToday(_dashRows, date);
+      }
+
+      function fmtThaiDate(dateStr) {
+        const TH_SHORT = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+        const [y, m, d] = dateStr.split("-");
+        return `${parseInt(d)} ${TH_SHORT[parseInt(m)-1]} ${parseInt(y)+543}`;
+      }
+
+      function renderDashToday(rows, date) {
+        const r1600 = rows.find(r => r.submit_date === date && r.submit_time_slot === "16.00");
+        const rEod  = rows.find(r => r.submit_date === date && r.submit_time_slot === "สิ้นวัน");
 
         function cardHtml(ico, slotLabel, row) {
           if (!row) return `
@@ -2212,14 +2240,14 @@
       }
 
       function renderDashMonthly(rows, today) {
-        const ym = today.slice(0, 7); // "YYYY-MM"
-        const monthRows = rows.filter(r => r.submit_date.startsWith(ym) && r.submit_time_slot === "สิ้นวัน");
+        // สรุปทุกเดือนที่มีข้อมูล (รอบสิ้นวันทั้งหมด)
+        const eodRows = rows.filter(r => r.submit_time_slot === "สิ้นวัน");
 
-        const totalActual = monthRows.reduce((s, r) => s + (parseFloat(r.actual_sale) || 0), 0);
-        const totalPlan   = monthRows.reduce((s, r) => s + (parseFloat(r.plan_sale) || 0), 0);
-        const totalTrans  = monthRows.reduce((s, r) => s + (parseFloat(r.total_trans) || 0), 0);
-        const totalLabourBaht = monthRows.reduce((s, r) => s + (parseFloat(r.labour_baht) || 0), 0);
-        const days = monthRows.length || 1;
+        const totalActual     = eodRows.reduce((s, r) => s + (parseFloat(r.actual_sale) || 0), 0);
+        const totalPlan       = eodRows.reduce((s, r) => s + (parseFloat(r.plan_sale) || 0), 0);
+        const totalTrans      = eodRows.reduce((s, r) => s + (parseFloat(r.total_trans) || 0), 0);
+        const totalLabourBaht = eodRows.reduce((s, r) => s + (parseFloat(r.labour_baht) || 0), 0);
+        const days = eodRows.length || 1;
 
         const pctPlan   = totalPlan > 0 ? ((totalActual / totalPlan) * 100).toFixed(1) + "%" : "-";
         const transDay  = (totalTrans / days).toFixed(1);
@@ -2227,7 +2255,7 @@
 
         const mm = parseInt(today.slice(5, 7)) - 1;
         const yy = parseInt(today.slice(0, 4));
-        document.getElementById("dashMonthTitle").textContent = "เดือน" + TH_MONTHS[mm] + " " + (yy + 543);
+        document.getElementById("dashMonthTitle").textContent = "สรุปรายเดือน — " + TH_MONTHS[mm] + " " + (yy + 543);
 
         document.getElementById("dashStatsGrid").innerHTML = `
           <div class="dash-stat">
@@ -2249,22 +2277,22 @@
       }
 
       function renderDashRecent(rows) {
-        const eodRows = rows.filter(r => r.submit_time_slot === "สิ้นวัน").slice(0, 7);
+        const eodRows = rows.filter(r => r.submit_time_slot === "สิ้นวัน");
         if (!eodRows.length) {
           document.getElementById("dashRecentBody").innerHTML =
             `<tr><td colspan="5" style="color:#94a3b8;padding:16px 0">ยังไม่มีข้อมูลรอบสิ้นวัน</td></tr>`;
           return;
         }
         document.getElementById("dashRecentBody").innerHTML = eodRows.map(r => {
-          const pct = r.plan_sale > 0 ? ((r.actual_sale / r.plan_sale) * 100).toFixed(1) + "%" : "-";
-          const pctColor = r.plan_sale > 0 && r.actual_sale >= r.plan_sale ? "var(--green)" : "var(--red)";
-          const d = r.submit_date.slice(5).replace("-", "/");
+          const pct       = r.plan_sale > 0 ? ((r.actual_sale / r.plan_sale) * 100).toFixed(1) + "%" : "-";
+          const pctColor  = r.plan_sale > 0 && r.actual_sale >= r.plan_sale ? "var(--green)" : "var(--red)";
+          const labPct    = r.actual_sale > 0 ? ((r.labour_baht / r.actual_sale) * 100).toFixed(1) + "%" : "-";
           return `<tr>
-            <td>${d}</td>
-            <td>${fmt(r.actual_sale)}</td>
+            <td style="white-space:nowrap">${fmtThaiDate(r.submit_date)}</td>
             <td>${fmt(r.plan_sale)}</td>
+            <td>${fmt(r.actual_sale)}</td>
             <td style="color:${pctColor};font-weight:700">${pct}</td>
-            <td>${fmt(r.total_trans)}</td>
+            <td>${labPct}</td>
           </tr>`;
         }).join("");
       }
