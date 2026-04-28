@@ -1373,7 +1373,7 @@
 
         /* Mobile: แสดงปุ่มออกจากระบบใน header */
         .hdr-logout-btn {
-          display: inline-flex !important;
+          display: inline-flex !important;  /* override global display:none */
         }
 
         /* iOS date input fix */
@@ -1435,26 +1435,35 @@
         }
       }
 /* ─── DASHBOARD ─── */
-.dash-wrap { padding:16px; max-width:700px; margin:0 auto 80px; }
+.hdr-logout-btn { display:none; }  /* ซ่อนบน desktop โดย default */
+.dash-wrap { padding:16px 20px; max-width:960px; margin:0 auto 80px; }
 .dash-sec-title { font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.06em; margin:20px 0 8px; }
 .dash-today-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.dash-today-card { background:#fff; border-radius:12px; padding:16px 14px; box-shadow:0 1px 4px rgba(0,0,0,.08); }
-.dash-today-card .dtc-slot { font-size:0.78rem; color:#64748b; margin-bottom:6px; }
+@media(min-width:640px){ .dash-today-grid { grid-template-columns:repeat(4,1fr); } }
+.dash-today-card { background:#fff; border-radius:12px; padding:18px 16px; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+.dash-today-card .dtc-slot { font-size:0.8rem; color:#64748b; margin-bottom:6px; }
 .dash-today-card .dtc-status { font-size:1.05rem; font-weight:600; margin-bottom:4px; }
-.dash-today-card .dtc-actual { font-size:1.35rem; font-weight:800; color:var(--brand); line-height:1.2; }
+.dash-today-card .dtc-actual { font-size:1.4rem; font-weight:800; color:var(--brand); line-height:1.2; }
 .dash-today-card .dtc-plan { font-size:0.78rem; color:#64748b; margin-top:3px; }
 .dash-stats-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
 @media(min-width:480px){ .dash-stats-grid { grid-template-columns:repeat(4,1fr); } }
-.dash-stat { background:#fff; border-radius:10px; padding:14px 10px; box-shadow:0 1px 4px rgba(0,0,0,.06); text-align:center; }
-.dash-stat .ds-val { font-size:1.25rem; font-weight:800; color:var(--brand); }
+.dash-stat { background:#fff; border-radius:10px; padding:16px 10px; box-shadow:0 1px 4px rgba(0,0,0,.06); text-align:center; }
+.dash-stat .ds-val { font-size:1.3rem; font-weight:800; color:var(--brand); }
 .dash-stat .ds-lbl { font-size:0.72rem; color:#64748b; margin-top:3px; }
-.dash-tbl { width:100%; border-collapse:collapse; font-size:0.84rem; }
-.dash-tbl th { background:var(--brand); color:#fff; padding:8px 6px; text-align:center; }
-.dash-tbl td { padding:7px 6px; border-bottom:1px solid #f1f5f9; text-align:center; }
+.dash-tbl { width:100%; border-collapse:collapse; font-size:0.87rem; }
+.dash-tbl th { background:var(--brand); color:#fff; padding:10px 8px; text-align:center; }
+.dash-tbl td { padding:9px 8px; border-bottom:1px solid #f1f5f9; text-align:center; }
 .dash-tbl tr:last-child td { border-bottom:none; }
 .d-ok { color:#15803d; font-weight:700; }
 .d-low { color:#dc2626; font-weight:700; }
 .dash-card-wrap { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+/* Date nav */
+.dash-date-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.dash-date-nav { display:flex; align-items:center; gap:0; border:1.5px solid var(--bd); border-radius:10px; overflow:hidden; background:#fff; flex:1; max-width:280px; }
+.dash-date-nav input[type="date"] { flex:1; padding:8px 10px; border:none; font-family:inherit; font-size:14px; color:var(--txt); background:transparent; outline:none; min-height:40px; text-align:center; cursor:pointer; }
+.dash-date-arrow { width:36px; height:40px; border:none; background:none; font-size:1.1rem; cursor:pointer; color:var(--txt2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.dash-date-arrow:hover { background:#f1f5f9; color:var(--brand); }
+.dash-date-divider { width:1px; height:24px; background:var(--bd); flex-shrink:0; }
     </style>
   </head>
 
@@ -1477,9 +1486,9 @@
         <button class="btn btn-sm btn-outline" onclick="showDash()">📊 แดชบอร์ด</button>
         <button class="btn btn-sm btn-outline" onclick="showPlan()">📅 Plan Sale</button>
         <button class="btn btn-sm btn-outline" onclick="showHistory()">🗂️ ประวัติ</button>
-        <button class="btn btn-sm btn-danger" onclick="doLogout()">🚪 ออกจากระบบ</button>
+        <button class="btn btn-sm btn-danger" onclick="doLogout()">ออกจากระบบ</button>
       </div>
-      <button class="btn btn-sm btn-danger hdr-logout-btn" id="hdrLogoutBtn" onclick="doLogout()" style="display:none">🚪 ออกจากระบบ</button>
+      <button class="btn btn-sm btn-danger hdr-logout-btn" id="hdrLogoutBtn" onclick="doLogout()" style="display:none">ออกจากระบบ</button>
     </header>
 
     <!-- ════════════════════════════════════════
@@ -1749,9 +1758,14 @@
         </div>
 
         <div class="dash-sec-title">สรุปรายวัน</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-          <input type="date" id="dashDatePicker" class="field-input" style="flex:1;max-width:200px"
-            onchange="renderDashFromCache()">
+        <div class="dash-date-row">
+          <div class="dash-date-nav">
+            <button class="dash-date-arrow" onclick="shiftDashDate(-1)">‹</button>
+            <div class="dash-date-divider"></div>
+            <input type="date" id="dashDatePicker" onchange="renderDashFromCache()">
+            <div class="dash-date-divider"></div>
+            <button class="dash-date-arrow" onclick="shiftDashDate(1)">›</button>
+          </div>
           <button class="btn btn-sm btn-outline" onclick="document.getElementById('dashDatePicker').value=todayStr();renderDashFromCache()">วันนี้</button>
         </div>
         <div class="dash-today-grid" id="dashTodayGrid">
@@ -2205,6 +2219,14 @@
         if (!_dashRows.length) return;
         const date = document.getElementById("dashDatePicker").value || todayStr();
         renderDashToday(_dashRows, date);
+      }
+
+      function shiftDashDate(delta) {
+        const picker = document.getElementById("dashDatePicker");
+        const d = new Date(picker.value || todayStr());
+        d.setDate(d.getDate() + delta);
+        picker.value = d.toISOString().slice(0, 10);
+        renderDashFromCache();
       }
 
       function fmtThaiDate(dateStr) {
