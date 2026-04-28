@@ -1371,6 +1371,10 @@
           display: none !important;
         }
 
+        .hdr-logout-btn {
+          display: flex !important;
+        }
+
         /* iOS date input fix */
         input[type="date"] {
           -webkit-appearance: none;
@@ -1473,6 +1477,7 @@
         <button class="btn btn-sm btn-outline" onclick="showHistory()">📊 ดูประวัติย้อนหลัง/แก้ไขข้อมูล</button>
         <button class="btn btn-sm btn-danger" onclick="doLogout()">ออกจากระบบ</button>
       </div>
+      <button class="btn btn-sm btn-danger hdr-logout-btn" id="hdrLogoutBtn" onclick="doLogout()" style="display:none">🚪</button>
     </header>
 
     <!-- ════════════════════════════════════════
@@ -1844,10 +1849,6 @@
         <span class="mob-nav-ico">🗂️</span>
         <span class="mob-nav-lbl">ประวัติ</span>
       </button>
-      <button class="mob-nav-btn mob-nav-btn-danger" onclick="doLogout()">
-        <span class="mob-nav-ico">🚪</span>
-        <span class="mob-nav-lbl">ออกจากระบบ</span>
-      </button>
     </nav>
 
 
@@ -2109,6 +2110,7 @@
         [0, 1, 2, 3, 4, 5].forEach(i => { const e = document.getElementById("ac" + i); if (e) { e.value = ""; e.classList.remove("filled"); } });
         document.getElementById("loginBtn").disabled = true;
         document.getElementById("appHdr").style.display = "none";
+        document.getElementById("hdrLogoutBtn").style.display = "none";
         document.getElementById("mobNav").classList.remove("visible");
         showScreen("sLogin");
       }
@@ -2134,6 +2136,7 @@
         document.getElementById("hdrBranchName").textContent = S.branch;
         document.getElementById("hdrBranchDm").textContent = "BZM: " + S.dm;
         document.getElementById("mobNav").classList.add("visible");
+        document.getElementById("hdrLogoutBtn").style.display = "";
         document.getElementById("submit_date").value = todayStr();
         const savedName = localStorage.getItem(LS_NAME);
         if (savedName) document.getElementById("submitter_name").value = savedName;
