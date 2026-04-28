@@ -520,9 +520,9 @@
       }
 
       .form-wrap {
-        max-width: 860px;
+        max-width: 1100px;
         margin: 0 auto;
-        padding: 10px 12px 96px;
+        padding: 10px 20px 96px;
       }
 
       .card {
@@ -1484,6 +1484,7 @@
       </div>
       <div class="hdr-actions" id="hdrActions" style="display:none">
         <button class="btn btn-sm btn-outline" onclick="showDash()">📊 แดชบอร์ด</button>
+        <button class="btn btn-sm btn-outline" onclick="showForm()">📋 ส่งยอดขาย</button>
         <button class="btn btn-sm btn-outline" onclick="showPlan()">📅 Plan Sale</button>
         <button class="btn btn-sm btn-outline" onclick="showHistory()">🗂️ ประวัติ</button>
         <button class="btn btn-sm btn-danger" onclick="doLogout()">ออกจากระบบ</button>
@@ -1857,17 +1858,17 @@
      MOBILE BOTTOM TAB BAR
 ════════════════════════════════════════ -->
     <nav class="mob-nav" id="mobNav">
+      <button class="mob-nav-btn" id="mnDash" onclick="showDash()">
+        <span class="mob-nav-ico">📊</span>
+        <span class="mob-nav-lbl">แดชบอร์ด</span>
+      </button>
       <button class="mob-nav-btn" id="mnForm" onclick="showForm()">
         <span class="mob-nav-ico">📋</span>
-        <span class="mob-nav-lbl">ส่งยอด</span>
+        <span class="mob-nav-lbl">ส่งยอดขาย</span>
       </button>
       <button class="mob-nav-btn" id="mnPlan" onclick="showPlan()">
         <span class="mob-nav-ico">📅</span>
         <span class="mob-nav-lbl">Plan Sale</span>
-      </button>
-      <button class="mob-nav-btn" id="mnDash" onclick="showDash()">
-        <span class="mob-nav-ico">📊</span>
-        <span class="mob-nav-lbl">แดชบอร์ด</span>
       </button>
       <button class="mob-nav-btn" id="mnHistory" onclick="showHistory()">
         <span class="mob-nav-ico">🗂️</span>
