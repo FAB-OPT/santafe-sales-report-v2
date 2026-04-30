@@ -1742,6 +1742,487 @@
   }
   .btn-edit-row:hover { border-color:var(--brand); color:var(--brand); background:var(--brand-l); }
 }
+
+/* ════════════════════════════════════════════════════════
+   VISUAL OVERHAUL v6  —  "Apple Notes" Minimal
+   ขาวล้วน · Hairline borders · Black text · Orange accent
+════════════════════════════════════════════════════════ */
+
+/* ── TOKENS ── */
+:root {
+  /* Single accent — Santa Fe orange (ใช้น้อยมาก เฉพาะ active/primary) */
+  --brand:    #f26c1c;
+  --brand-d:  #d45a10;
+  --brand-l:  #fff5ec;
+  --brand-ll: #fffaf5;
+  --accent:   #f26c1c;
+  --accent-l: #fff5ec;
+  /* Surfaces — pure white */
+  --bg:        #ffffff;
+  --bg-2:      #f9f9fb;
+  --surface:   #ffffff;
+  --surface-2: #fbfbfd;
+  /* Text — Apple's grayscale */
+  --txt:       #000000;
+  --txt2:      #8e8e93;
+  --txt3:      #c7c7cc;
+  /* Borders — Apple separator */
+  --bd:        #e5e5ea;
+  --bd-2:      #f2f2f7;
+  /* Status (subtle) */
+  --green:    #34c759; --green-l: #e8f8ec;
+  --red:      #ff3b30; --red-l:   #ffe8e6;
+  --blue:     #007aff; --blue-l:  #e6f1ff;
+  --amber:    #ff9500; --amber-l: #fff3e0;
+  /* No shadows (flat) */
+  --shadow-sm: none;
+  --shadow:    none;
+  --shadow-lg: none;
+  --radius:    10px;
+  --radius-sm: 7px;
+}
+
+body { background: var(--bg) !important; color: var(--txt) !important; }
+
+body { background: var(--bg); color: var(--txt); }
+
+/* ─── CARDS — Apple Notes flat ─── */
+.card {
+  background: var(--surface) !important;
+  border-radius: var(--radius);
+  border: 1px solid var(--bd);
+  box-shadow: none !important;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.card-hdr {
+  background: var(--surface) !important;
+  color: var(--txt) !important;
+  border-bottom: 1px solid var(--bd-2);
+  padding: 14px 18px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-body { padding: 16px 18px; }
+
+/* ─── LOGIN — Apple Notes white minimal ─── */
+.login-bg { background: var(--bg-2) !important; }
+.login-card {
+  border-radius: 14px !important;
+  border: 1px solid var(--bd) !important;
+  box-shadow: none !important;
+  background: var(--surface) !important;
+}
+.login-app-hdr {
+  padding: 24px 24px 20px !important;
+  border-bottom: 1px solid var(--bd-2) !important;
+  gap: 14px !important;
+  background: var(--surface) !important;
+}
+.login-app-name  { font-size: 17px !important; font-weight: 700 !important; color: var(--txt) !important; letter-spacing: -.015em; }
+.login-app-ver   { font-size: 12px !important; color: var(--txt2) !important; font-weight: 400 !important; }
+.login-app-logo  { border-radius: 11px !important; box-shadow: none !important; }
+/* Tabs: minimal */
+.login-tabs { background: var(--bg-2) !important; border-radius: 9px !important; margin: 18px 20px 0 !important; padding: 3px !important; }
+.login-tab  { border-radius: 7px !important; font-size: 13.5px !important; font-weight: 600 !important; color: var(--txt2) !important; transition: all .15s; }
+.login-tab.active { background: var(--surface) !important; color: var(--txt) !important; box-shadow: 0 1px 2px rgba(0,0,0,.06) !important; }
+/* OTP boxes */
+.login-otp-box {
+  width: 48px !important; height: 58px !important;
+  border: 1.5px solid var(--bd) !important;
+  border-radius: 10px !important;
+  font-size: 22px !important; font-weight: 700 !important;
+  background: var(--surface) !important; color: var(--txt) !important;
+  transition: border-color .15s, box-shadow .15s !important;
+}
+.login-otp-box:focus { border-color: var(--brand) !important; background: var(--surface) !important; box-shadow: 0 0 0 3px rgba(242,108,28,.12) !important; }
+.login-otp-box.filled { border-color: var(--brand) !important; background: var(--surface) !important; color: var(--txt) !important; }
+/* Submit button */
+.login-submit-wrap { padding: 16px 20px 20px !important; border-top: 1px solid var(--bd-2) !important; }
+.btn-login-submit {
+  background: var(--brand) !important;
+  border-radius: 10px !important;
+  font-size: 15.5px !important; font-weight: 700 !important;
+  letter-spacing: .01em !important;
+  transition: background .15s, transform .1s !important;
+  box-shadow: none !important;
+}
+.btn-login-submit:not(:disabled):hover  { background: var(--brand-d) !important; }
+.btn-login-submit:not(:disabled):active { transform: scale(.98) !important; }
+.btn-login-submit:disabled { opacity: .35 !important; cursor: default; pointer-events: none; }
+
+/* ─── BUTTONS — flat, minimal ─── */
+.btn { border-radius: var(--radius-sm) !important; font-weight: 600 !important; letter-spacing: .005em !important; transition: all .14s !important; }
+.btn-brand { background: var(--brand) !important; color: #fff !important; box-shadow: none !important; }
+.btn-brand:hover { background: var(--brand-d) !important; box-shadow: none !important; transform: none !important; }
+.btn-brand:active { transform: scale(.98) !important; }
+.btn-outline { border: 1px solid var(--bd) !important; color: var(--txt) !important; background: var(--surface) !important; }
+.btn-outline:hover { border-color: var(--txt2) !important; color: var(--txt) !important; background: var(--bg-2) !important; }
+.btn-danger { background: var(--red) !important; box-shadow: none !important; color: #fff !important; }
+.btn-danger:hover { background: #d70015 !important; box-shadow: none !important; }
+
+/* ─── FIELDS — flat, hairline ─── */
+.field label { font-size: 12px !important; font-weight: 600 !important; color: var(--txt2) !important; letter-spacing: 0 !important; text-transform: none !important; }
+.field input, .field select {
+  border: 1px solid var(--bd) !important; border-radius: var(--radius-sm) !important;
+  background: var(--surface) !important; color: var(--txt) !important;
+  transition: border-color .14s, box-shadow .14s !important; outline: none !important;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px rgba(242,108,28,.10) !important;
+}
+.field input::placeholder { color: var(--txt3) !important; }
+
+/* ─── HEADER ─── */
+.hdr { background: var(--surface) !important; border-bottom: 1px solid var(--bd) !important; box-shadow: none !important; }
+
+/* ─── BADGES (global, subtle) ─── */
+.badge       { font-size: 11.5px !important; font-weight: 600 !important; padding: 2px 9px !important; border-radius: 6px !important; letter-spacing: 0 !important; }
+.badge-green { background: var(--green-l) !important; color: #1a7838 !important; }
+.badge-blue  { background: var(--blue-l)  !important; color: #0056cc !important; }
+.badge-amber { background: var(--amber-l) !important; color: #c46c00 !important; }
+.slot-badge  { font-size: 11.5px !important; font-weight: 600 !important; padding: 2px 10px !important; border-radius: 6px !important; letter-spacing: 0 !important; }
+.slot-1600   { background: var(--blue-l)  !important; color: #0056cc !important; }
+.slot-eod    { background: var(--green-l) !important; color: #1a7838 !important; }
+.pct-ok  { color: #1a7838 !important; font-weight: 600 !important; font-variant-numeric: tabular-nums; }
+.pct-low { color: #d70015 !important; font-weight: 600 !important; font-variant-numeric: tabular-nums; }
+.d-ok    { color: #1a7838 !important; font-weight: 600 !important; }
+.d-low   { color: #d70015 !important; font-weight: 600 !important; }
+
+/* ─── MODALS — Apple style ─── */
+.modal-bg  { background: rgba(0,0,0,.30) !important; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.modal-box { border-radius: 14px !important; border: 1px solid var(--bd) !important; box-shadow: 0 10px 40px rgba(0,0,0,.10) !important; overflow: hidden; background: var(--surface) !important; }
+.modal-hdr { background: var(--surface) !important; border-bottom: 1px solid var(--bd-2) !important; padding: 16px 20px !important; font-size: 16px !important; font-weight: 700 !important; color: var(--txt) !important; letter-spacing: -.01em; text-transform: none !important; }
+.modal-footer { background: var(--surface) !important; border-top: 1px solid var(--bd-2) !important; padding: 14px 20px !important; gap: 10px !important; }
+
+/* ════════════════════════
+   MOBILE  ≤ 640px
+════════════════════════ */
+@media (max-width: 640px) {
+  body { background: var(--bg) !important; }
+
+  /* Header */
+  .hdr { box-shadow: none !important; border-bottom: 1px solid var(--bd) !important; }
+  .hdr-logout-btn {
+    background: transparent !important; color: var(--brand) !important;
+    font-size: 14px !important; font-weight: 600 !important;
+    padding: 6px 12px !important; border-radius: 6px !important;
+    border: none !important; cursor: pointer;
+  }
+  .hdr-logout-btn:hover { background: var(--bg-2) !important; }
+
+  /* Cards */
+  .card { border-radius: 10px !important; border: 1px solid var(--bd) !important; box-shadow: none !important; margin-bottom: 12px !important; }
+  .card-hdr { font-size: 14px !important; padding: 14px 16px 8px !important; font-weight: 700 !important; color: var(--txt) !important; background: var(--surface) !important; }
+  .card-body { padding: 14px 16px !important; }
+
+  /* Bottom nav — Apple Notes tab style */
+  .mob-nav.visible {
+    background: rgba(255,255,255,.92) !important;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--bd) !important;
+    box-shadow: none !important;
+  }
+  .mob-nav-btn { color: var(--txt2) !important; gap: 3px !important; padding: 8px 2px 12px !important; transition: color .14s !important; }
+  .mob-nav-btn.active { color: var(--brand) !important; }
+  .mob-nav-ico { font-size: 20px !important; }
+  .mob-nav-lbl { font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0 !important; }
+
+  /* Dashboard cards — flat */
+  .dash-today-card { background: var(--surface) !important; border: 1px solid var(--bd) !important; border-radius: 10px !important; box-shadow: none !important; border-top: 1px solid var(--bd) !important; }
+  .dash-stat { background: var(--surface) !important; border: 1px solid var(--bd) !important; border-radius: 10px !important; box-shadow: none !important; }
+  .dash-card-wrap { background: var(--surface) !important; border: 1px solid var(--bd) !important; border-radius: 10px !important; box-shadow: none !important; overflow: hidden; }
+  /* ตัวเลขดำ minimal */
+  .dash-today-card .dtc-actual { color: var(--txt) !important; font-variant-numeric: tabular-nums; font-weight: 700 !important; }
+  .dash-stat .ds-val { color: var(--txt) !important; font-weight: 700 !important; }
+  .dash-stat .ds-lbl { color: var(--txt2) !important; }
+  .dash-tbl th { background: var(--bg-2) !important; color: var(--txt2) !important; font-size: 11px !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; border-bottom: 1px solid var(--bd) !important; }
+  .dash-tbl td { border-bottom: 1px solid var(--bd-2) !important; }
+
+  /* Form */
+  .form-wrap { padding: 12px 12px 150px !important; background: var(--bg) !important; }
+
+  /* Plan */
+  .plan-sum-card { border-left: none !important; border: 1px solid var(--bd) !important; border-radius: 10px !important; background: var(--surface) !important; }
+  .plan-sum-lbl { font-size: 12px !important; font-weight: 600 !important; text-transform: none !important; letter-spacing: 0 !important; color: var(--txt2) !important; }
+  .plan-sum-val { font-size: 1.7rem !important; font-weight: 700 !important; font-variant-numeric: tabular-nums; color: var(--txt) !important; letter-spacing: -.02em; }
+}
+
+/* ════════════════════════
+   DESKTOP  ≥ 641px
+════════════════════════ */
+@media (min-width: 641px) {
+  :root { --sidebar-w: 252px; }
+
+  body { background: var(--bg) !important; }
+  #appHdr { display: none !important; }
+
+  /* ─ Sidebar — pure white minimal (Apple Notes) ─ */
+  .desk-sidebar {
+    background: var(--bg-2) !important;
+    box-shadow: none !important;
+    border-right: 1px solid var(--bd) !important;
+    width: var(--sidebar-w);
+  }
+  .desk-sidebar.hidden { display: none !important; }
+  .dsb-brand { padding: 22px 18px 18px !important; border-bottom: 1px solid var(--bd) !important; margin-bottom: 12px !important; }
+  .dsb-logo  { width: 38px !important; height: 38px !important; border-radius: 9px !important; box-shadow: none !important; }
+  .dsb-branch { font-size: 14px !important; font-weight: 700 !important; color: var(--txt) !important; letter-spacing: -.01em; }
+  .dsb-dm     { font-size: 12px !important; color: var(--txt2) !important; margin-top: 2px !important; font-weight: 400 !important; }
+  .dsb-nav-label { font-size: 11px !important; font-weight: 600 !important; color: var(--txt2) !important; letter-spacing: 0 !important; text-transform: none !important; padding: 12px 18px 6px !important; }
+  .desk-nav { padding: 0 10px !important; gap: 1px !important; }
+  .desk-nav-btn {
+    padding: 8px 12px !important; border-radius: 6px !important;
+    font-size: 14px !important; font-weight: 500 !important;
+    color: var(--txt) !important; gap: 10px !important;
+    transition: background .12s !important;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center;
+    text-align: left; width: 100%; font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .desk-nav-btn:hover { background: rgba(0,0,0,.04) !important; }
+  /* Active = ส้มอ่อนเล็กน้อย (Apple Notes selected) */
+  .desk-nav-btn.active {
+    background: var(--brand) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    font-weight: 600 !important;
+  }
+  .desk-nav-ico { font-size: 15px !important; width: 18px !important; text-align: center; flex-shrink: 0; opacity: 1 !important; }
+  .desk-nav-sep { height: 1px !important; background: var(--bd) !important; margin: 12px 10px !important; }
+  .desk-logout-btn {
+    display: flex; align-items: center; gap: 10px !important;
+    margin: 0 10px !important; padding: 8px 12px !important;
+    border: none; background: none; border-radius: 6px !important; cursor: pointer;
+    font-family: inherit; font-size: 14px !important; font-weight: 500 !important;
+    color: var(--txt2) !important;
+    transition: background .12s !important;
+  }
+  .desk-logout-btn:hover { background: rgba(0,0,0,.04) !important; color: var(--red) !important; }
+
+  /* ─ Content offset ─ */
+  .screen.active:not(#sLogin) { margin-left: var(--sidebar-w); min-height: 100vh; background: var(--bg) !important; }
+
+  /* ─ Cards on desktop ─ */
+  .card { border-radius: var(--radius) !important; border: 1px solid var(--bd) !important; box-shadow: none !important; background: var(--surface) !important; }
+  .card-hdr {
+    background: var(--surface) !important; color: var(--txt) !important;
+    border-bottom: 1px solid var(--bd-2) !important;
+    font-size: 15px !important; font-weight: 700 !important;
+    letter-spacing: -.01em !important; text-transform: none !important;
+    padding: 14px 20px 10px !important;
+  }
+  .card-body { padding: 18px 20px !important; }
+
+  /* ─ Tables — Apple Notes minimal ─ */
+  table { font-size: 14px !important; border-collapse: collapse; width: 100%; }
+  thead tr, .plan-grid-hdr, .dash-tbl th { background: var(--bg-2) !important; }
+  th {
+    padding: 10px 16px !important; font-size: 12px !important; font-weight: 600 !important;
+    letter-spacing: 0 !important; text-transform: none !important; color: var(--txt2) !important;
+    border-bottom: 1px solid var(--bd) !important;
+  }
+  td { padding: 11px 16px !important; border-bottom: 1px solid var(--bd-2) !important; color: var(--txt) !important; font-size: 14px !important; }
+  tbody tr:nth-child(even) td { background: var(--surface) !important; }
+  tbody tr:hover td { background: var(--bg-2) !important; }
+  tr:last-child td { border-bottom: none !important; }
+  .hist-table-wrap { background: var(--surface) !important; border: 1px solid var(--bd) !important; border-radius: var(--radius) !important; overflow: hidden; box-shadow: none !important; }
+
+  /* ─ Dashboard ─ */
+  .dash-wrap { padding: 32px 40px 48px !important; max-width: 1200px; }
+  .dash-page-title { font-size: 1.7rem !important; font-weight: 700 !important; letter-spacing: -.02em !important; color: var(--txt) !important; }
+  .dash-page-sub   { font-size: 13px !important; color: var(--txt2) !important; margin-top: 4px !important; }
+  .dash-upper-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .dash-sec-title  { font-size: 12px !important; font-weight: 600 !important; color: var(--txt2) !important; text-transform: none !important; letter-spacing: 0 !important; margin: 24px 0 10px !important; }
+  .dash-today-card {
+    background: var(--surface) !important; border: 1px solid var(--bd) !important;
+    border-top: 1px solid var(--bd) !important;
+    border-radius: var(--radius) !important; box-shadow: none !important; padding: 18px 18px !important;
+    transition: border-color .14s !important;
+  }
+  .dash-today-card:hover { border-color: var(--txt3) !important; }
+  .dash-today-card .dtc-slot   { font-size: 12px !important; color: var(--txt2) !important; margin-bottom: 6px !important; font-weight: 500 !important; text-transform: none !important; letter-spacing: 0 !important; }
+  .dash-today-card .dtc-status { font-size: 13px !important; font-weight: 500 !important; margin-bottom: 4px !important; color: var(--txt2) !important; }
+  /* ตัวเลข = ดำ minimal */
+  .dash-today-card .dtc-actual { font-size: 1.9rem !important; font-weight: 700 !important; color: var(--txt) !important; font-variant-numeric: tabular-nums; letter-spacing: -.025em !important; }
+  .dash-today-card .dtc-plan   { font-size: 12px !important; color: var(--txt2) !important; margin-top: 4px !important; }
+  .dash-today-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .dash-stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dash-stat {
+    background: var(--surface) !important; border: 1px solid var(--bd) !important;
+    border-radius: var(--radius) !important; box-shadow: none !important;
+    padding: 16px 14px !important; text-align: center;
+    transition: border-color .14s !important;
+  }
+  .dash-stat:hover { transform: none !important; box-shadow: none !important; border-color: var(--txt3) !important; }
+  .dash-stat .ds-val { font-size: 1.5rem !important; font-weight: 700 !important; color: var(--txt) !important; font-variant-numeric: tabular-nums; letter-spacing: -.025em !important; }
+  .dash-stat .ds-lbl { font-size: 12px !important; color: var(--txt2) !important; margin-top: 4px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; }
+  .dash-card-wrap  { background: var(--surface) !important; border: 1px solid var(--bd) !important; border-radius: var(--radius) !important; box-shadow: none !important; overflow: hidden; }
+  .dash-tbl        { font-size: 13.5px !important; }
+  .dash-tbl th     { background: var(--bg-2) !important; font-size: 12px !important; font-weight: 600 !important; letter-spacing: 0 !important; color: var(--txt2) !important; padding: 10px 12px !important; text-transform: none !important; border-bottom: 1px solid var(--bd) !important; }
+  .dash-tbl td     { padding: 10px 12px !important; font-variant-numeric: tabular-nums; border-bottom: 1px solid var(--bd-2) !important; }
+  .dash-date-nav   { border: 1px solid var(--bd) !important; border-radius: var(--radius-sm) !important; background: var(--surface) !important; overflow: hidden; }
+  .dash-date-nav input[type="date"] { font-size: 13.5px !important; color: var(--txt) !important; }
+  .dash-date-arrow { color: var(--txt2) !important; transition: background .12s, color .12s !important; }
+  .dash-date-arrow:hover { background: var(--bg-2) !important; color: var(--txt) !important; }
+
+  /* ─ Form ─ */
+  .form-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    padding: 28px 32px 0; align-items: start; max-width: none;
+  }
+  .form-wrap .card:nth-child(1),
+  .form-wrap .card:nth-child(4) { grid-column: 1 / -1; }
+  .form-wrap .card { margin-bottom: 0; }
+  .form-wrap .card-body { padding: 20px 22px; }
+  .field-grid { grid-template-columns: repeat(4,1fr); gap: 14px; }
+  .info-grid  { grid-template-columns: 180px 150px 1fr; gap: 14px; }
+  .field input, .field select { font-size: 14px; min-height: 42px; padding: 9px 13px; }
+  .field label { font-size: 11px; }
+  .form-sticky-btn {
+    position: static; padding: 20px 32px 36px; background: none;
+    border: none; box-shadow: none; text-align: right; grid-column: 1 / -1;
+  }
+  .form-sticky-btn .btn-lg { width: auto; min-width: 220px; font-size: 15px; }
+
+  /* ─ Plan Sale ─ */
+  .plan-wrap { max-width: 1200px !important; padding: 32px 40px 48px !important; }
+  .plan-month-bar {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px !important;
+    padding-bottom: 16px !important; border-bottom: 1px solid var(--bd) !important; flex-wrap: nowrap;
+  }
+  .plan-month-bar h2 { font-size: 1.7rem !important; font-weight: 700 !important; letter-spacing: -.02em !important; flex: 1; color: var(--txt) !important; }
+  .plan-month-nav { background: var(--bg-2) !important; border-radius: 8px !important; padding: 3px !important; display: flex; align-items: center; }
+  .plan-month-nav .btn-sm { background: none !important; border: none !important; width: 32px !important; height: 32px !important; padding: 0 !important; border-radius: 6px !important; font-size: 1rem !important; display: flex; align-items: center; justify-content: center; color: var(--txt2) !important; }
+  .plan-month-nav .btn-sm:hover { background: var(--surface) !important; color: var(--txt) !important; }
+  .plan-month-lbl { font-size: 14px !important; font-weight: 600 !important; min-width: 130px !important; text-align: center; color: var(--txt) !important; }
+  .plan-summary { grid-template-columns: repeat(3,1fr); gap: 12px !important; margin-bottom: 20px !important; }
+  .plan-sum-card {
+    background: var(--surface) !important; border: 1px solid var(--bd) !important;
+    border-left: 1px solid var(--bd) !important; border-radius: var(--radius) !important;
+    box-shadow: none !important; padding: 18px 20px !important;
+    transition: border-color .14s !important;
+  }
+  .plan-sum-card:hover { transform: none !important; box-shadow: none !important; border-color: var(--txt3) !important; }
+  .plan-sum-card:nth-child(2) { border-left: 1px solid var(--bd) !important; }
+  .plan-sum-card:nth-child(3) { border-left: 1px solid var(--bd) !important; }
+  .plan-sum-lbl { font-size: 12px !important; font-weight: 500 !important; color: var(--txt2) !important; text-transform: none !important; letter-spacing: 0 !important; margin-bottom: 6px !important; }
+  .plan-sum-val { font-size: 1.7rem !important; font-weight: 700 !important; color: var(--txt) !important; font-variant-numeric: tabular-nums; letter-spacing: -.025em !important; }
+  .plan-grid { background: var(--surface) !important; border: 1px solid var(--bd) !important; border-radius: var(--radius) !important; box-shadow: none !important; overflow: hidden; }
+  .plan-grid-hdr { grid-template-columns: 60px 130px 1fr 80px; padding: 10px 20px !important; font-size: 12px !important; font-weight: 600 !important; letter-spacing: 0 !important; background: var(--bg-2) !important; color: var(--txt2) !important; text-transform: none !important; border-bottom: 1px solid var(--bd) !important; }
+  .plan-row { grid-template-columns: 60px 130px 1fr 80px; padding: 8px 20px !important; border-bottom: 1px solid var(--bd-2) !important; }
+  .plan-row:last-child { border-bottom: none !important; }
+  .plan-row input { font-size: 14px !important; padding: 7px 12px !important; border-radius: var(--radius-sm) !important; }
+  .plan-row.today { background: var(--brand-l) !important; box-shadow: none !important; }
+  .plan-row.sat   { background: var(--bg-2) !important; }
+  .plan-row.sun   { background: var(--bg-2) !important; }
+  .plan-day-num   { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .plan-day-name  { font-size: 13px; }
+  .plan-sticky-btn {
+    position: static; padding: 20px 0 0; background: none;
+    border: none; box-shadow: none; display: flex; justify-content: flex-end; gap: 12px; margin-top: 0;
+  }
+  .plan-sticky-btn .btn-lg, .plan-sticky-btn .btn-outline { width: auto; min-width: 160px; }
+
+  /* ─ History ─ */
+  .hist-wrap { max-width: 1200px !important; padding: 32px 40px 48px !important; }
+  .hist-hdr {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px !important; padding-bottom: 16px !important; border-bottom: 1px solid var(--bd) !important;
+  }
+  .hist-hdr h2 { font-size: 1.7rem !important; font-weight: 700 !important; letter-spacing: -.02em !important; flex: 1; color: var(--txt) !important; }
+  .hist-hdr .btn-outline { display: none; }
+
+  /* ─ Edit button — minimal ─ */
+  .btn-edit-row {
+    padding: 5px 12px !important; font-size: 13px !important; border-radius: 6px !important;
+    background: transparent !important; border: 1px solid var(--bd) !important; color: var(--txt) !important;
+    cursor: pointer; font-weight: 500 !important; transition: all .12s !important;
+  }
+  .btn-edit-row:hover { border-color: var(--txt2) !important; color: var(--txt) !important; background: var(--bg-2) !important; }
+
+  /* ─ Hover row tint ─ */
+  tbody tr:hover td { background: var(--bg-2) !important; }
+
+  /* ─ Page titles: black ─ */
+  .dash-page-title, .plan-month-bar h2, .hist-hdr h2 { color: var(--txt) !important; }
+  .plan-month-lbl { color: var(--txt) !important; }
+
+  /* ─ Page header (consistent) ─ */
+  .dash-page-hdr {
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid var(--bd) !important;
+    margin-bottom: 24px !important;
+  }
+  .dash-page-hdr button {
+    background: var(--surface) !important;
+    border: 1px solid var(--bd) !important;
+    color: var(--txt) !important;
+    padding: 7px 14px !important;
+    border-radius: var(--radius-sm) !important;
+    font-family: inherit;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    transition: all .14s !important;
+  }
+  .dash-page-hdr button:hover {
+    border-color: var(--txt2) !important;
+    color: var(--txt) !important;
+    background: var(--bg-2) !important;
+  }
+
+  /* ─ Rules card — Apple Notes "callout" ─ */
+  .rules-card {
+    background: var(--bg-2) !important;
+    border: 1px solid var(--bd) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 12px 16px !important;
+    color: var(--txt) !important;
+  }
+  .rules-card-title { color: var(--brand) !important; font-weight: 600 !important; font-size: 13px !important; text-transform: none !important; letter-spacing: 0 !important; }
+
+  /* ─ Edit banner ─ */
+  .edit-banner {
+    background: var(--amber-l) !important;
+    border: 1px solid #ffd180 !important;
+    color: #b35900 !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 12px 16px !important;
+    font-size: 13px !important;
+  }
+
+  /* ─ Modals on desktop ─ */
+  .modal-box { max-width: 520px !important; }
+  .modal-hdr { font-size: 16px !important; padding: 16px 22px !important; letter-spacing: -.01em !important; text-transform: none !important; color: var(--txt) !important; font-weight: 700 !important; }
+  .modal-footer { padding: 14px 22px !important; }
+
+  /* ─ Login card max-width on desktop ─ */
+  .login-card { max-width: 440px !important; }
+
+  /* ─ Sticky button area: clean ─ */
+  .form-sticky-btn { border-top: 1px solid var(--bd) !important; margin-top: 8px !important; padding-top: 18px !important; }
+
+  /* ─ Plan today indicator ─ */
+  .plan-row.today .plan-day-num,
+  .plan-row.today .plan-day-name { color: var(--brand) !important; font-weight: 700 !important; }
+
+  /* ─ Status icons ─ */
+  .plan-status.ok { color: #1a7838 !important; }
+  .plan-status.lock { color: var(--txt3) !important; }
+
+  .desk-nav-btn { position: relative; }
+
+  /* ─ Today/recent table hover ─ */
+  .dash-tbl tbody tr:hover td { background: var(--bg-2) !important; }
+}
     </style>
   </head>
 
